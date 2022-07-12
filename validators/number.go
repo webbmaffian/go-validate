@@ -8,7 +8,7 @@ import (
 	"github.com/webbmaffian/go-validate/utils"
 )
 
-func Integer(value, parent reflect.Value, arg string, flags utils.Flags) (err error) {
+func Integer(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
 	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}

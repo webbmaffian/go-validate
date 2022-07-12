@@ -14,7 +14,7 @@ func init() {
 	emailRegex = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 }
 
-func Email(value, parent reflect.Value, arg string, flags utils.Flags) (err error) {
+func Email(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
 	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}

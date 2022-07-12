@@ -10,7 +10,13 @@ import (
 const tagSeparator = ","
 const kvSeparator = "="
 
-func Struct(v any, flags ...utils.Flag) ValidationErrors {
+func Struct(v any, options ...utils.Options) ValidationErrors {
+	var opt utils.Options
+
+	if len(options) != 0 {
+		opt = options[0]
+	}
+
 	typ := reflect.TypeOf(v)
 	val := reflect.ValueOf(v)
 
@@ -26,7 +32,7 @@ func Struct(v any, flags ...utils.Flag) ValidationErrors {
 	errors := make(ValidationErrors, 0, 5)
 	path := "$"
 
-	iterateStructFields(typ, val, utils.Flags(flags), path, &errors)
+	iterateStructFields(typ, val, &opt, path, &errors)
 
 	if len(errors) != 0 {
 		return errors
@@ -35,7 +41,7 @@ func Struct(v any, flags ...utils.Flag) ValidationErrors {
 	return nil
 }
 
-func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags, path string, errors *ValidationErrors) {
+func iterateStructFields(typ reflect.Type, val reflect.Value, opt *utils.Options, path string, errors *ValidationErrors) {
 	numFields := typ.NumField()
 
 	for i := 0; i < numFields; i++ {
@@ -45,25 +51,20 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags,
 			continue
 		}
 
-		fldVal := getValue(val.Field(i), flags)
+		fldVal := getValue(val.Field(i), opt)
 
 		if tagStr := fld.Tag.Get("validate"); tagStr != "" {
 			tags := strings.Split(tagStr, tagSeparator)
 
 			for _, tag := range tags {
 				tag, arg, _ := strings.Cut(tag, kvSeparator)
-				tag, flag, hasFlag := strings.Cut(tag, "(")
 
-				if hasFlag {
-					flag = strings.TrimRight(flag, ")")
-				}
-
-				if validator, exists := registeredValidators[tag]; exists && (flag == "" || flags.Has(utils.Flag(flag))) {
+				if validator, exists := registeredValidators[tag]; exists {
 					if !validator.acceptZero && (!fldVal.IsValid() || fldVal.IsZero()) {
 						continue
 					}
 
-					if err := validator.validator(fldVal, val, arg, flags); err != nil {
+					if err := validator.validator(fldVal, val, arg, opt); err != nil {
 						valErr := ValidationError{
 							Tag:     tag,
 							Message: err.Error(),
@@ -85,7 +86,7 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags,
 		}
 
 		if fldVal.Kind() == reflect.Struct {
-			iterateStructFields(fldVal.Type(), fldVal, flags, path+"."+fieldName(fld), errors)
+			iterateStructFields(fldVal.Type(), fldVal, opt, path+"."+fieldName(fld), errors)
 		}
 	}
 }

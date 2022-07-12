@@ -6,7 +6,7 @@ import (
 	"github.com/webbmaffian/go-validate/utils"
 )
 
-type ValueGetter func(originalValue reflect.Value, flags utils.Flags) any
+type ValueGetter func(originalValue reflect.Value, opt *utils.Options) any
 
 var registeredValueGetters map[string]ValueGetter
 
@@ -20,9 +20,9 @@ func RegisterValueGetter(fn ValueGetter, types ...any) {
 	}
 }
 
-func getValue(originalValue reflect.Value, flags utils.Flags) reflect.Value {
+func getValue(originalValue reflect.Value, opt *utils.Options) reflect.Value {
 	if valueGetter, exists := registeredValueGetters[originalValue.Type().Name()]; exists {
-		res := valueGetter(originalValue, flags)
+		res := valueGetter(originalValue, opt)
 
 		if reflVal, ok := res.(reflect.Value); ok {
 			return reflVal

@@ -23,7 +23,7 @@ func getRegex(pattern string) (regex *regexp.Regexp, err error) {
 	return
 }
 
-func Regex(value, parent reflect.Value, arg string, flags utils.Flags) (err error) {
+func Regex(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
 	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}

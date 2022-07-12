@@ -23,7 +23,7 @@ func getOneof(str string) (oneof []string) {
 	return
 }
 
-func Oneof(value, parent reflect.Value, arg string, flags utils.Flags) (err error) {
+func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
 	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}

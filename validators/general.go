@@ -7,10 +7,14 @@ import (
 	"github.com/webbmaffian/go-validate/utils"
 )
 
-func Required(value, parent reflect.Value, arg string, flags utils.Flags) (err error) {
-	if !value.IsValid() || value.IsZero() {
-		err = errors.New("Required field")
+func Required(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
+	if value.IsValid() {
+		if !value.IsZero() {
+			return
+		}
+	} else if opt.SkipNil {
+		return
 	}
 
-	return
+	return errors.New("Required field")
 }

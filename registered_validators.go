@@ -7,7 +7,7 @@ import (
 	"github.com/webbmaffian/go-validate/validators"
 )
 
-type Validator func(value reflect.Value, parent reflect.Value, arg string, flags utils.Flags) error
+type Validator func(value reflect.Value, parent reflect.Value, arg string, opt *utils.Options) error
 
 type registeredValidator struct {
 	validator  Validator
