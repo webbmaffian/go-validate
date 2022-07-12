@@ -7,10 +7,10 @@ func (v *ValidationErrors) Error() string {
 }
 
 type ValidationError struct {
-	Tag     string
-	Message string
-	Path    string
-	Value   any
+	Tag     string `json:"code"`
+	Message string `json:"message"`
+	Path    string `json:"path"`
+	Value   any    `json:"value"`
 }
 
 func (v *ValidationError) Error() string {
