@@ -11,7 +11,7 @@ const tagSeparator = ","
 const kvSeparator = "="
 const flagSeparator = "@"
 
-func Struct(v any, flags ...utils.Flag) []ValidationError {
+func Struct(v any, flags ...utils.Flag) ValidationErrors {
 	typ := reflect.TypeOf(v)
 	val := reflect.ValueOf(v)
 
@@ -24,7 +24,7 @@ func Struct(v any, flags ...utils.Flag) []ValidationError {
 		return nil
 	}
 
-	errors := make([]ValidationError, 0, 5)
+	errors := make(ValidationErrors, 0, 5)
 	path := "$"
 
 	iterateStructFields(typ, val, utils.Flags(flags), path, &errors)
@@ -36,7 +36,7 @@ func Struct(v any, flags ...utils.Flag) []ValidationError {
 	return nil
 }
 
-func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags, path string, errors *[]ValidationError) {
+func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags, path string, errors *ValidationErrors) {
 	numFields := typ.NumField()
 
 	for i := 0; i < numFields; i++ {
