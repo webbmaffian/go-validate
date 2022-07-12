@@ -9,7 +9,6 @@ import (
 
 const tagSeparator = ","
 const kvSeparator = "="
-const flagSeparator = "@"
 
 func Struct(v any, flags ...utils.Flag) ValidationErrors {
 	typ := reflect.TypeOf(v)
@@ -53,7 +52,11 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, flags utils.Flags,
 
 			for _, tag := range tags {
 				tag, arg, _ := strings.Cut(tag, kvSeparator)
-				tag, flag, _ := strings.Cut(tag, flagSeparator)
+				tag, flag, hasFlag := strings.Cut(tag, "(")
+
+				if hasFlag {
+					flag = strings.TrimRight(flag, ")")
+				}
 
 				if validator, exists := registeredValidators[tag]; exists && (flag == "" || flags.Has(utils.Flag(flag))) {
 					if !validator.acceptZero && (!fldVal.IsValid() || fldVal.IsZero()) {
