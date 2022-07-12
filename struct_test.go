@@ -44,7 +44,7 @@ func TestStructSkipTag(t *testing.T) {
 	user := User{
 		FirstName: Text{String: "", Status: Null},
 	}
-	errs := Struct(user, utils.Options{
+	_, errs := Struct(user, utils.Options{
 		SkipNil: true,
 	})
 

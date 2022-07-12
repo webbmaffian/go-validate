@@ -10,7 +10,7 @@ import (
 const tagSeparator = ","
 const kvSeparator = "="
 
-func Struct(v any, options ...utils.Options) ValidationErrors {
+func Struct(v any, options ...utils.Options) (bool, ValidationErrors) {
 	var opt utils.Options
 
 	if len(options) != 0 {
@@ -26,7 +26,7 @@ func Struct(v any, options ...utils.Options) ValidationErrors {
 	}
 
 	if typ.Kind() != reflect.Struct {
-		return nil
+		return false, nil
 	}
 
 	errors := make(ValidationErrors, 0, 5)
@@ -34,11 +34,7 @@ func Struct(v any, options ...utils.Options) ValidationErrors {
 
 	iterateStructFields(typ, val, &opt, path, &errors)
 
-	if len(errors) != 0 {
-		return errors
-	}
-
-	return nil
+	return len(errors) != 0, errors
 }
 
 func iterateStructFields(typ reflect.Type, val reflect.Value, opt *utils.Options, path string, errors *ValidationErrors) {
