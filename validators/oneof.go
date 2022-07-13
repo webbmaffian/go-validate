@@ -45,14 +45,14 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		oneof := getOneof(arg)
 
 	outer:
-		for _, s := range oneof {
-			for _, str := range v {
+		for _, s := range v {
+			for _, str := range oneof {
 				if s == str {
 					continue outer
 				}
-
-				return errors.New("Must be one of: " + strings.Join(oneof, ", "))
 			}
+
+			return errors.New("Must be one of: " + strings.Join(oneof, ", "))
 		}
 
 		return
