@@ -18,3 +18,11 @@ func Required(value, parent reflect.Value, arg string, opt *utils.Options) (err 
 
 	return errors.New("Required field")
 }
+
+func Forbidden(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
+	if !value.IsValid() || value.IsZero() {
+		return
+	}
+
+	return errors.New("Forbidden field")
+}

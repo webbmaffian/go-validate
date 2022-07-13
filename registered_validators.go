@@ -18,11 +18,12 @@ var registeredValidators map[string]registeredValidator
 
 func init() {
 	registeredValidators = map[string]registeredValidator{
-		"required": {validators.Required, true},
-		"integer":  {validators.Integer, false},
-		"regex":    {validators.Regex, false},
-		"email":    {validators.Email, false},
-		"oneof":    {validators.Oneof, false},
+		"required":  {validators.Required, true},
+		"forbidden": {validators.Forbidden, true},
+		"integer":   {validators.Integer, false},
+		"regex":     {validators.Regex, false},
+		"email":     {validators.Email, false},
+		"oneof":     {validators.Oneof, false},
 	}
 }
 
