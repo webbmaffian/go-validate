@@ -13,7 +13,7 @@ func Integer(value, parent reflect.Value, arg string, opt *utils.Options) (err e
 		value = value.Elem()
 	}
 
-	if str, ok := value.Interface().(string); ok {
+	if str, ok := utils.String(value); ok {
 		if _, intErr := strconv.ParseInt(str, 10, 64); intErr == nil {
 			return
 		}

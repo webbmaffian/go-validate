@@ -19,7 +19,7 @@ func Email(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		value = value.Elem()
 	}
 
-	if str, ok := value.Interface().(string); ok {
+	if str, ok := utils.String(value); ok {
 		if emailRegex.MatchString(str) {
 			return
 		}

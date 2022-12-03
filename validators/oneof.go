@@ -28,6 +28,18 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		value = value.Elem()
 	}
 
+	if v, ok := utils.String(value); ok {
+		oneof := getOneof(arg)
+
+		for _, s := range oneof {
+			if s == v {
+				return
+			}
+		}
+
+		return errors.New("Must be one of: " + strings.Join(oneof, ", "))
+	}
+
 	switch v := value.Interface().(type) {
 
 	case string:
