@@ -84,6 +84,10 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, opt *utils.Options
 		}
 
 		if fldVal.Kind() == reflect.Struct {
+			if zero, ok := fldVal.Interface().(IsZeroer); ok && opt.SkipNil && zero.IsZero() {
+				continue
+			}
+
 			iterateStructFields(fldVal.Type(), fldVal, opt, path+"."+fieldName(fld), errors)
 		}
 	}
