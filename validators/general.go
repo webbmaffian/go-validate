@@ -8,11 +8,11 @@ import (
 )
 
 func Required(value, parent reflect.Value, arg string, opt *utils.Options) (err error) {
-	if value.IsValid() {
-		if !value.IsZero() {
-			return
-		}
-	} else if opt.SkipNil {
+	if opt.SkipNil {
+		return
+	}
+
+	if value.IsValid() && !value.IsZero() {
 		return
 	}
 
