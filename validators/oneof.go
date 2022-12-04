@@ -57,5 +57,5 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		return
 	}
 
-	return errors.New("Must be a string")
+	return nil
 }
