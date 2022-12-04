@@ -40,20 +40,7 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		return errors.New("Must be one of: " + strings.Join(oneof, ", "))
 	}
 
-	switch v := value.Interface().(type) {
-
-	case string:
-		oneof := getOneof(arg)
-
-		for _, s := range oneof {
-			if s == v {
-				return
-			}
-		}
-
-		return errors.New("Must be one of: " + strings.Join(oneof, ", "))
-
-	case []string:
+	if v, ok := utils.StringArray(value); ok {
 		oneof := getOneof(arg)
 
 	outer:
