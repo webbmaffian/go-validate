@@ -51,6 +51,10 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, opt *utils.Options
 
 		fldVal := getValue(val.Field(i), opt)
 
+		if zero, ok := fldVal.Interface().(IsZeroer); ok && opt.SkipNil && zero.IsZero() {
+			continue
+		}
+
 		if tagStr := fld.Tag.Get("validate"); tagStr != "" {
 			tags := strings.Split(tagStr, tagSeparator)
 
@@ -84,10 +88,6 @@ func iterateStructFields(typ reflect.Type, val reflect.Value, opt *utils.Options
 		}
 
 		if fldVal.Kind() == reflect.Struct {
-			if zero, ok := fldVal.Interface().(IsZeroer); ok && opt.SkipNil && zero.IsZero() {
-				continue
-			}
-
 			iterateStructFields(fldVal.Type(), fldVal, opt, path+"."+fieldName(fld), errors)
 		}
 	}
