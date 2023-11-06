@@ -29,10 +29,14 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 	}
 
 	if v, ok := utils.String(value); ok {
+		if v == "" {
+			return
+		}
+
 		oneof := getOneof(arg)
 
 		for _, s := range oneof {
-			if s == v || s == "" {
+			if s == v {
 				return
 			}
 		}
@@ -45,8 +49,12 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 
 	outer:
 		for _, s := range v {
+			if s == "" {
+				continue outer
+			}
+
 			for _, str := range oneof {
-				if s == str || s == "" {
+				if s == str {
 					continue outer
 				}
 			}
