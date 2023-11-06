@@ -32,7 +32,7 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 		oneof := getOneof(arg)
 
 		for _, s := range oneof {
-			if s == v {
+			if s == v || s == "" {
 				return
 			}
 		}
@@ -46,7 +46,7 @@ func Oneof(value, parent reflect.Value, arg string, opt *utils.Options) (err err
 	outer:
 		for _, s := range v {
 			for _, str := range oneof {
-				if s == str {
+				if s == str || s == "" {
 					continue outer
 				}
 			}
