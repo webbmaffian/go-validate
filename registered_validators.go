@@ -23,7 +23,7 @@ func init() {
 		"integer":   {validators.Integer, false},
 		"regex":     {validators.Regex, false},
 		"email":     {validators.Email, false},
-		"oneof":     {validators.Oneof, true},
+		"oneof":     {validators.Oneof, false},
 	}
 }
 
